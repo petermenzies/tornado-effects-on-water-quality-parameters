@@ -1,0 +1,18 @@
+---
+title: "NOAA Tornado Data"
+author: "Peter Menzies"
+date: "10/1/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(here)
+library(tidyverse)
+```
+
+```{r}
+tornadoes <- read_csv(here("data", "1950-2019_all_tornadoes.csv"))
+```
+
