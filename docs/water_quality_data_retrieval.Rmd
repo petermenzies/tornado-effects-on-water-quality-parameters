@@ -14,7 +14,7 @@ library(dataRetrieval)
 
 ## Assigning API query components
 
-This site was found using the USGS National Water Dashboard. The parameter codes were pulled from https://help.waterdata.usgs.gov/parameter_cd?group_cd=%25
+Thisstudy site and associated information was found using the USGS National Water Dashboard. The parameter codes were pulled from https://help.waterdata.usgs.gov/parameter_cd?group_cd=%25
 
 ```{r}
 ## Maumelle River near Wye, AR - flows through Oklahoma and drains to Mississippi
