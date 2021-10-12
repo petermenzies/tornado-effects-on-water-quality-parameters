@@ -14,14 +14,14 @@ library(dataRetrieval)
 
 ## Assigning API query components
 
-Thisstudy site and associated information was found using the USGS National Water Dashboard. The parameter codes were pulled from https://help.waterdata.usgs.gov/parameter_cd?group_cd=%25
+This study site and associated information was found using the USGS National Water Dashboard. Site information can be found at https://waterdata.usgs.gov/nwis/uv?site_no=07263296. The parameter codes were pulled from https://help.waterdata.usgs.gov/parameter_cd?group_cd=%25. Data from the NWIS web service is derived from https://waterservices.usgs.gov/.
 
 ```{r}
 ## Maumelle River near Wye, AR - flows through Oklahoma and drains to Mississippi
-## Water data back to 1989, supposedly
-siteNumber <- c("07263296")
+## Water data back to 1989, if available.
+siteNumber <- c("07263296") 
 
-## temp, discharge, turbidity, dissolved o2, suspended sediment conc. respecitvely
+## temp, discharge, turbidity, dissolved o2, and suspended sediment conc., respectively
 parameterCd <- c("00010", "00060", "63680", "00300", "99409")
 
 startDate <- "1989-01-01"
@@ -30,6 +30,31 @@ endDate <- "2021-10-01"
 
 ```{r}
 water <- readNWISdv(siteNumber, parameterCd, startDate, endDate) %>% 
-  rename(water_temp_c = X_00010_00003, discharge_cfs = X_00060_00003, turbidity_fnu = X_63680_00003, diss_02_mgl = X_00300_00003)
+  rename(water_temp_c = X_00010_00003, 
+         discharge_cfs = X_00060_00003, 
+         turbidity_fnu = X_63680_00003, 
+         diss_02_mgl = X_00300_00003)
+```
+
+
+The following embedded metadata functions were found using the dataRetrieval package tutorial: https://cran.r-project.org/web/packages/dataRetrieval/vignettes/dataRetrieval.html#embedded-metadata
+
+```{r}
+# embedded metadata
+
+# URL of API query
+attr(water, "url")
+
+# Time API accessed
+attr(water, "queryTime")
+
+# Information on the site queried
+attr(water, "siteInfo")
+
+# Names of columns
+attributes(water)$names
+
+# Variable information for water quality parameters
+attr(water, "variableInfo")
 ```
 
