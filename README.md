@@ -2,9 +2,9 @@
 
 ### Team Members:
 
-Alex Clippinger
-Charles Hendrickson
-Shale Hunter
+Alex Clippinger,
+Charles Hendrickson,
+Shale Hunter,
 Peter Menzies
 
 ### Project Information:
