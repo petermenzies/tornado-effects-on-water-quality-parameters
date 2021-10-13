@@ -8,11 +8,17 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
+## Load packages
 library(here)
 library(tidyverse)
 ```
 
+Tornado data is retrieved from NOAA's National Weather Service found at https://www.spc.noaa.gov/wcm/#data.
+
+## Read in tornado csv as data frame
+
 ```{r}
+# Create data frame
 tornadoes <- read_csv(here("data", "1950-2019_all_tornadoes.csv"))
 ```
 
