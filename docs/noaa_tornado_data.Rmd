@@ -22,3 +22,22 @@ Tornado data is retrieved from NOAA's National Weather Service found at https://
 tornadoes <- read_csv(here("data", "1950-2019_all_tornadoes.csv"))
 ```
 
+## exploration
+
+```{r}
+monitor = tribble(~lat, ~long,
+                  34.87888889, -92.6855556)
+
+big_T = tornadoes %>% 
+  filter(mag > 2,
+         slat < 36,
+         slon > -95,
+         yr >=2007,
+         yr <= 2019) %>% 
+  filter(st %in% c("AR", "KS", "NE", "OK"))
+
+T_plot = ggplot(big_T, aes(x=slon, y=slat)) +
+  geom_point(aes(color=yr))
+
+T_plot + geom_point(monitor, mapping = aes(x=long, y=lat), color = "red")
+
