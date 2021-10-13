@@ -8,27 +8,34 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
+## Load packages
 library(tidyverse)
 library(dataRetrieval)
+
+library(kableExtra)
 ```
 
-## Assigning API query components
-
 This study site and associated information was found using the USGS National Water Dashboard. Site information can be found at https://waterdata.usgs.gov/nwis/uv?site_no=07263296. The parameter codes were pulled from https://help.waterdata.usgs.gov/parameter_cd?group_cd=%25. Data from the NWIS web service is derived from https://waterservices.usgs.gov/.
+
+## Assigning API query components
 
 ```{r}
 ## Maumelle River near Wye, AR - flows through Oklahoma and drains to Mississippi
 ## Water data back to 1989, if available.
 siteNumber <- c("07263296") 
 
-## temp, discharge, turbidity, dissolved o2, and suspended sediment conc., respectively
+## Parameter codes for temp, discharge, turbidity, dissolved o2, and suspended sediment conc., respectively
 parameterCd <- c("00010", "00060", "63680", "00300", "99409")
 
+## Temporal range of our current study
 startDate <- "1989-01-01"
 endDate <- "2021-10-01"
 ```
 
+## Import data from NWIS web service
+
 ```{r}
+# Imports data using query components from above and changes column names to readable text
 water <- readNWISdv(siteNumber, parameterCd, startDate, endDate) %>% 
   rename(water_temp_c = X_00010_00003, 
          discharge_cfs = X_00060_00003, 
@@ -36,6 +43,8 @@ water <- readNWISdv(siteNumber, parameterCd, startDate, endDate) %>%
          diss_02_mgl = X_00300_00003)
 ```
 
+
+## Import various embedded metadata
 
 The following embedded metadata functions were found using the dataRetrieval package tutorial: https://cran.r-project.org/web/packages/dataRetrieval/vignettes/dataRetrieval.html#embedded-metadata
 
@@ -55,6 +64,7 @@ attr(water, "siteInfo")
 attributes(water)$names
 
 # Variable information for water quality parameters
-attr(water, "variableInfo")
+variableInfo <- attr(water, "variableInfo")
+kable(variableInfo)
 ```
 
