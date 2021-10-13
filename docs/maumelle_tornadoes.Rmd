@@ -1,0 +1,31 @@
+---
+title: "Maumelle Tornadoes"
+author: "Peter Menzies"
+date: "10/13/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+tornadoes <- read_csv(here("data", "1950-2019_all_tornadoes.csv"))
+```
+
+```{r}
+maumelle_tornadoes <- tornadoes %>% 
+  filter(mag >= 3) %>% 
+  filter(slat > 34 & slat < 35.5) %>% 
+  filter(slon > -91.5 & slon < -90) %>% 
+  filter(yr > 2006) %>% 
+  select(date, time, mag, slat:len)
+```
+
+```{r}
+mau_water <- ggplot(water, aes(x = Date, y = turbidity_fnu)) +
+  geom_line() +
+  geom_vline()
+```
+
+ 
