@@ -32,3 +32,5 @@ Turbidity: http://purl.dataone.org/odo/ECSO_00002359
 Dissolved Oxygen: http://sweetontology.net/matr/DissolvedOxygen
 
 River water temperature: http://purl.dataone.org/odo/ECSO_00001528
+
+Tornado: http://purl.obolibrary.org/obo/ENVO_01001482
