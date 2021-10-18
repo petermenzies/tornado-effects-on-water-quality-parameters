@@ -24,8 +24,7 @@ maumelle_tornadoes <- tornadoes %>%
 
 ```{r}
 mau_water <- ggplot(water, aes(x = Date, y = turbidity_fnu)) +
-  geom_line() +
-  geom_vline()
+  geom_line()
 ```
 
  
