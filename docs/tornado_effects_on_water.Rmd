@@ -1,0 +1,135 @@
+---
+title: "Effect of tornadoes on water quality parameters"
+author: "Peter Menzies"
+date: "10/18/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+## Load packages
+library(tidyverse)
+library(dataRetrieval)
+library(here)
+library(kableExtra)
+```
+
+## US water quality data
+
+This study site and associated information was found using the USGS National Water Dashboard. Site information can be found at https://waterdata.usgs.gov/nwis/uv?site_no=07263296. The parameter codes were pulled from https://help.waterdata.usgs.gov/parameter_cd?group_cd=%25. Data from the NWIS web service is derived from https://waterservices.usgs.gov/.
+
+### Assigning API query components
+
+```{r}
+## Maumelle River near Wye, AR - flows through Oklahoma and drains to Mississippi
+## Water data back to 1989, if available.
+siteNumber <- c("07263296") 
+
+## Parameter codes for temp, discharge, turbidity, dissolved o2, and suspended sediment conc., respectively
+parameterCd <- c("00010", "00060", "63680", "00300", "99409")
+
+## Temporal range of our current study
+startDate <- "1989-01-01"
+endDate <- "2021-10-01"
+```
+
+### Import data from NWIS web service
+
+```{r}
+# Imports data using query components from above and changes column names to readable text
+water <- readNWISdv(siteNumber, parameterCd, startDate, endDate) %>% 
+  rename(water_temp_c = X_00010_00003, 
+         discharge_cfs = X_00060_00003, 
+         turbidity_fnu = X_63680_00003, 
+         diss_02_mgl = X_00300_00003)
+```
+
+
+### Import various embedded metadata
+
+The following embedded metadata functions were found using the dataRetrieval package tutorial: https://cran.r-project.org/web/packages/dataRetrieval/vignettes/dataRetrieval.html#embedded-metadata
+
+```{r}
+# embedded metadata
+
+# URL of API query
+attr(water, "url")
+
+# Time API accessed
+attr(water, "queryTime")
+
+# Information on the site queried
+attr(water, "siteInfo")
+
+# Names of columns
+attributes(water)$names
+
+# Variable information for water quality parameters
+variableInfo <- attr(water, "variableInfo")
+kable(variableInfo)
+```
+## US tornado data
+
+Tornado data is retrieved from NOAA's National Weather Service found at https://www.spc.noaa.gov/wcm/#data.
+
+### Read in tornado csv as data frame
+
+```{r}
+# Create data frame
+tornadoes <- read_csv(here("data", "1950-2019_all_tornadoes.csv"))
+```
+
+### Exploring spatial distribution of tornadoes magnitude 3 and above near stream site
+
+```{r}
+# Creating location of monitor object
+monitor = tribble(~lat, ~long,
+                  34.87888889, -92.6855556)
+
+# Filtering tornadoes based on magnitude, location, and time of ocurrance
+big_T = tornadoes %>% 
+  filter(mag > 2,
+         slat < 36,
+         slon > -95,
+         yr >=2007,
+         yr <= 2019) %>% 
+  filter(st %in% c("AR", "KS", "NE", "OK"))
+
+# Plotting tornado locations
+T_plot = ggplot(big_T, aes(x=slon, y=slat)) +
+  geom_point(aes(color=yr))
+
+# Adding location of Maumelle stream site to plot
+T_plot + geom_point(monitor, mapping = aes(x=long, y=lat), color = "red")
+
+```
+
+### Comparing stream measurement time-series with close-proximity tornado occurance
+
+```{r}
+mau_water_turb <- ggplot(water, aes(x = Date, y = turbidity_fnu)) +
+  geom_line() +
+  geom_vline(data = big_T, aes(xintercept = big_T$date), color = 'red')
+
+mau_water_turb
+
+mau_water_dis <- ggplot(water, aes(x = Date, y = discharge_cfs)) +
+  geom_line() +
+  geom_vline(data = big_T, aes(xintercept = big_T$date), color = 'red')
+
+mau_water_dis
+
+mau_water_02 <- ggplot(water, aes(x = Date, y = diss_02_mgl)) +
+  geom_line() +
+  geom_vline(data = big_T, aes(xintercept = big_T$date), color = 'red')
+
+mau_water_02
+
+mau_water_temp <- ggplot(water, aes(x = Date, y = water_temp_c)) +
+  geom_line() +
+  geom_vline(data = big_T, aes(xintercept = big_T$date), color = 'red')
+
+mau_water_temp
+```
+
