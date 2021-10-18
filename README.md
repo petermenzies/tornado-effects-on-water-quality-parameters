@@ -23,3 +23,6 @@ Tornado data and water quality data are imported in a tidy format to begin with,
 
 After data processing for this project, we will retain our final data and code in a repository on github here: https://github.com/petermenzies/tornado-effects-on-water-quality-parameters
 
+### Data Semantics:
+
+Sediment Flux: http://purl.dataone.org/odo/ECSO_00001596
