@@ -26,3 +26,5 @@ After data processing for this project, we will retain our final data and code i
 ### Data Semantics:
 
 Sediment Flux: http://purl.dataone.org/odo/ECSO_00001596
+
+Turbidity: http://purl.dataone.org/odo/ECSO_00002359
