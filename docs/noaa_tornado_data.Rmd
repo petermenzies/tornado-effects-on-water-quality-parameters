@@ -41,3 +41,4 @@ T_plot = ggplot(big_T, aes(x=slon, y=slat)) +
 
 T_plot + geom_point(monitor, mapping = aes(x=long, y=lat), color = "red")
 
+```
