@@ -44,7 +44,10 @@ water <- readNWISdv(siteNumber, parameterCd, startDate, endDate) %>%
          turbidity_fnu = X_63680_00003, 
          diss_02_mgl = X_00300_00003) %>% 
   select(Date, water_temp_c, discharge_cfs, diss_02_mgl, turbidity_fnu)
+```
 
+```{r, eval=FALSE}
+# Export water data
 write.csv(water, "~/Downloads/maumelle_water_2007-2021.csv")
 ```
 
