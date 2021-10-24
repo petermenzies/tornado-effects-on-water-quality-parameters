@@ -17,7 +17,7 @@ library(kableExtra)
 
 ## US water quality data
 
-This study site and associated information was found using the USGS National Water Dashboard. Site information can be found at https://waterdata.usgs.gov/nwis/uv?site_no=07263296. The parameter codes were pulled from https://help.waterdata.usgs.gov/parameter_cd?group_cd=%25. Data from the NWIS web service is derived from https://waterservices.usgs.gov/.
+This study site and associated information was found using the USGS National Water Dashboard. Site information can be found at <https://waterdata.usgs.gov/nwis/uv?site_no=07263296>. The parameter codes were pulled from <https://help.waterdata.usgs.gov/parameter_cd?group_cd=%25>. Data from the NWIS web service is derived from <https://waterservices.usgs.gov/>.
 
 ### Assigning API query components
 
@@ -42,8 +42,8 @@ water <- readNWISdv(siteNumber, parameterCd, startDate, endDate) %>%
   rename(water_temp_c = X_00010_00003, 
          discharge_cfs = X_00060_00003, 
          turbidity_fnu = X_63680_00003, 
-         diss_02_mgl = X_00300_00003) %>% 
-  select(Date, water_temp_c, discharge_cfs, diss_02_mgl, turbidity_fnu)
+         diss_o2_mgl = X_00300_00003) %>% 
+  select(Date, water_temp_c, discharge_cfs, diss_o2_mgl, turbidity_fnu)
 ```
 
 ```{r, eval=FALSE}
@@ -51,10 +51,9 @@ water <- readNWISdv(siteNumber, parameterCd, startDate, endDate) %>%
 write.csv(water, "~/Downloads/maumelle_water_2007-2021.csv")
 ```
 
-
 ### Import various embedded metadata
 
-The following embedded metadata functions were found using the dataRetrieval package tutorial: https://cran.r-project.org/web/packages/dataRetrieval/vignettes/dataRetrieval.html#embedded-metadata
+The following embedded metadata functions were found using the dataRetrieval package tutorial: <https://cran.r-project.org/web/packages/dataRetrieval/vignettes/dataRetrieval.html#embedded-metadata>
 
 ```{r}
 # embedded metadata
@@ -75,9 +74,10 @@ attributes(water)$names
 variableInfo <- attr(water, "variableInfo")
 kable(variableInfo)
 ```
+
 ## US tornado data
 
-Tornado data is retrieved from NOAA's National Weather Service found at https://www.spc.noaa.gov/wcm/#data.
+Tornado data is retrieved from NOAA's National Weather Service found at <https://www.spc.noaa.gov/wcm/#data>.
 
 ### Read in tornado csv as data frame
 
@@ -126,11 +126,11 @@ mau_water_dis <- ggplot(water, aes(x = Date, y = discharge_cfs)) +
 
 mau_water_dis
 
-mau_water_02 <- ggplot(water, aes(x = Date, y = diss_02_mgl)) +
+mau_water_o2 <- ggplot(water, aes(x = Date, y = diss_o2_mgl)) +
   geom_line() +
   geom_vline(data = big_T, aes(xintercept = big_T$date), color = 'red')
 
-mau_water_02
+mau_water_o2
 
 mau_water_temp <- ggplot(water, aes(x = Date, y = water_temp_c)) +
   geom_line() +
@@ -138,4 +138,3 @@ mau_water_temp <- ggplot(water, aes(x = Date, y = water_temp_c)) +
 
 mau_water_temp
 ```
-
