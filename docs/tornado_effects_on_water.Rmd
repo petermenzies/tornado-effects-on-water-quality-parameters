@@ -99,8 +99,9 @@ big_T = tornadoes %>%
          slat < 36,
          slon > -95,
          yr >=2007,
-         yr <= 2019) %>% 
-  filter(st %in% c("AR", "KS", "NE", "OK"))
+         yr <= 2019,
+         st %in% c("AR", "KS", "NE", "OK")) %>% 
+  mutate(date = as.Date(date))
 
 # Plotting tornado locations
 T_plot = ggplot(data = big_T, aes(x = slon, y = slat)) +
