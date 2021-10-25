@@ -1,0 +1,106 @@
+---
+title: "Effects of tornadoes on water quality parameters"
+author: "Alex Clippinger; Peter Menzies; Shale Hunter; Charles Hendrickson"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(dataRetrieval)
+library(rnoaa)
+library(sf)
+library(tmap)
+```
+
+```{r}
+## Maumelle River near Wye, AR - flows through Oklahoma and drains to Mississippi
+## Water data back to 1989, if available.
+siteNumber <- c("07263296") 
+
+## Parameter codes for temp, discharge, turbidity, dissolved o2, and suspended sediment conc., respectively
+parameterCd <- c("00010", "00060", "63680", "00300", "99409")
+
+## Temporal range of our current study
+startDate <- "1989-01-01"
+endDate <- "2021-10-01"
+```
+
+```{r}
+# Imports data using query components from above and changes column names to readable text
+water <- readNWISdv(siteNumber, parameterCd, startDate, endDate) %>% 
+  rename(water_temp_c = X_00010_00003, 
+         discharge_cfs = X_00060_00003, 
+         turbidity_fnu = X_63680_00003, 
+         diss_o2_mgl = X_00300_00003) %>% 
+  select(Date, water_temp_c, discharge_cfs, diss_o2_mgl, turbidity_fnu)
+```
+
+```{r}
+# Load tornadoes
+tornadoes <- rnoaa::tornadoes()
+
+# Filter tornadoes
+tornadoes_subset <- tornadoes %>% 
+  st_as_sf() %>% 
+  filter(yr >= 2007,
+         yr <= 2019, 
+         mag > 2) %>% 
+  st_transform(crs = 32616) # WGS 84 / UTM zone 16N
+
+# Pull site info
+site_info <- attr(water, "siteInfo")
+
+# Create spatial data frame of site location
+site_info_sfc <- st_sfc(st_point(c(site_info$dec_lon_va, site_info$dec_lat_va)), crs = 4326) 
+site_info_sfc <- st_transform(site_info_sfc, crs = 32616) 
+
+# Buffer site
+site_buffer <- st_buffer(site_info_sfc, dist = 100000)
+
+# Crop tornadoes to site buffer
+tornadoes_cropped <- tornadoes_subset[site_buffer, op = st_intersects]
+```
+
+```{r}
+tm_shape(site_buffer) +
+  tm_polygons(col = "white") +
+tm_shape(site_info_sfc) +
+  tm_dots(size = 0.25) +
+tm_shape(tornadoes_cropped) + 
+  tm_lines(col = "mag",
+           palette = "Reds")
+```
+
+```{r}
+# Pull out dates of tornadoes near site
+tornado_dates <- select(.data = tornadoes_cropped, date, mag) %>% 
+  st_drop_geometry() %>% 
+  mutate(date = as.Date(date))
+
+# Add +/- 10 days to either side of date
+date_vector <- vector()
+
+for (i in seq_along(tornado_dates$date)) {
+  for (j in seq(-10, 10, 1)) {
+    date_vector <- c(date_vector, tornado_dates$date[i] + j)
+  }
+}
+
+# Change date vector back to date class
+date_vector <- as.Date(date_vector, origin = "1970-01-01")
+
+# Use date vector to filter water data
+water_tornado_effects <- water %>% 
+  filter(Date %in% date_vector)
+```
+
+```{r}
+# Plot something I guess
+ggplot(data = water_tornado_effects[1:21, ], aes(x = Date, y = turbidity_fnu)) +
+  geom_point()
+```
+
+Not sure where this analysis is headed.
