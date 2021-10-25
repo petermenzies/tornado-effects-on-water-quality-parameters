@@ -11,8 +11,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Load packages
 library(tidyverse)
 library(dataRetrieval)
-library(here)
 library(kableExtra)
+library(sf)
 ```
 
 ## US water quality data
@@ -90,11 +90,11 @@ tornadoes <- rnoaa::tornadoes()
 
 ```{r}
 # Creating location of monitor object
-monitor = tribble(~lat, ~long,
-                  34.87888889, -92.6855556)
+monitor = attr(water, "siteInfo")
 
 # Filtering tornadoes based on magnitude, location, and time of ocurrance
 big_T = tornadoes %>% 
+  st_as_sf() %>% 
   filter(mag > 2,
          slat < 36,
          slon > -95,
@@ -103,11 +103,16 @@ big_T = tornadoes %>%
   filter(st %in% c("AR", "KS", "NE", "OK"))
 
 # Plotting tornado locations
-T_plot = ggplot(big_T, aes(x=slon, y=slat)) +
-  geom_point(aes(color=yr))
+T_plot = ggplot(data = big_T, aes(x = slon, y = slat)) +
+  geom_point(aes(color = yr))
 
 # Adding location of Maumelle stream site to plot
-T_plot + geom_point(monitor, mapping = aes(x=long, y=lat), color = "red")
+T_plot + 
+  geom_point(data = monitor, mapping = aes(x = dec_lon_va, y = dec_lat_va), color = "red") + 
+  theme_classic() +
+  labs(x = "Starting Latitute (WGS84)",
+       y = "Starting Longitute (WGS84)",
+       title = "Major Tornado Occurrences Near Maumelle, AR Water Gauge, 2007-2019")
 
 ```
 
