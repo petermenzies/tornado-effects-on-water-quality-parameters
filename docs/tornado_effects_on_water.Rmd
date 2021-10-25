@@ -13,6 +13,7 @@ library(tidyverse)
 library(dataRetrieval)
 library(kableExtra)
 library(sf)
+library(tmap)
 ```
 
 ## US water quality data
@@ -154,3 +155,66 @@ Firstly, initial exploration of stream monitoring sites has shown that data coll
 The addition of more monitoring sites will involve (potentially substantial) data integration and merging. Simplification of the merging process is yet another reason to restrict expansion to those sites that track the same metrics already investigated here.
 
 Finally, our current project is limited to one site, and therefore much of our analysis is based off of interpretation of data visualizations such as the graphs above. The integration of more datasets from other monitoring stations would provide a better basis for more robust statistical analysis that may be able to detect a more nuanced interaction between tornadoes and stream chemistry than is presented here.
+
+Additional statistical analysis beyond the visualizations above could be performed to more accurately assess the relationship between tornadoes and water quality data. An example of the potential merging of these datasets for the same site is provided below.
+
+```{r}
+# Filter tornadoes
+tornadoes_subset <- tornadoes %>% 
+  st_as_sf() %>% 
+  filter(yr >= 2007,
+         yr <= 2019, 
+         mag > 2) %>% 
+  st_transform(crs = 32616) # WGS 84 / UTM zone 16N
+
+# Create spatial data frame of site location
+site_location <- st_sfc(st_point(c(monitor$dec_lon_va, monitor$dec_lat_va)), crs = 4326) %>% 
+  st_transform(crs = 32616) 
+
+# Buffer site
+site_buffer <- st_buffer(site_location, dist = 100000)
+
+# Crop tornadoes to site buffer
+tornadoes_cropped <- tornadoes_subset[site_buffer, op = st_intersects]
+
+# Pull out dates of tornadoes near site
+tornado_dates <- select(.data = tornadoes_cropped, date, mag) %>% 
+  st_drop_geometry() %>% 
+  mutate(date = as.Date(date))
+
+# Add +/- 10 days to either side of date
+date_vector <- vector()
+for (i in seq_along(tornado_dates$date)) {
+  for (j in seq(-10, 10, 1)) {
+    date_vector <- c(date_vector, tornado_dates$date[i] + j)
+  }
+}
+
+# Change date vector back to date class
+date_vector <- as.Date(date_vector, origin = "1970-01-01")
+
+# Use date vector to filter water data
+water_tornado_effects <- water %>% 
+  filter(Date %in% date_vector)
+```
+
+### Visualizing Results
+
+```{r}
+# Show site location, different spatial join method (buffer), and resulting tornadoes
+tm_shape(site_buffer) +
+  tm_polygons(col = "white") +
+tm_shape(site_location) +
+  tm_dots(size = 0.25) +
+tm_shape(tornadoes_cropped) + 
+  tm_lines(col = "mag",
+           palette = "Reds")
+```
+
+```{r}
+# Show water quality data for +/- 10 days of a single tornado
+ggplot(data = water_tornado_effects[1:21, ], aes(x = Date, y = turbidity_fnu)) +
+  geom_point() +
+  theme_classic()
+```
+
