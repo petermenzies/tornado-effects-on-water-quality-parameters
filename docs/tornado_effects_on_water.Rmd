@@ -138,3 +138,13 @@ mau_water_temp <- ggplot(water, aes(x = Date, y = water_temp_c)) +
 
 mau_water_temp
 ```
+
+## Future Directions
+
+The most logical next step identified by our team in order to gain better understanding of the effects of tornadoes on stream water quality beyond the data presented here would be to expand our analysis to a greater number of stream monitoring sites. This is an obvious step to expand the available data, but there are many smaller processes involved in integrating future stream data into our analysis here. 
+
+Firstly, initial exploration of stream monitoring sites has shown that data collection (both in terms of time frame and data types) is often inconsistent between monitoring sites. In order to ensure consistency of data across sites, any potential sites need to be filtered to include only those sites which match our current metrics of turbidity, sediment, dissolved oxygen, and water temperature. Furthermore, only sites which are in close proximity to a recorded tornado (and were actively monitoring during the time of that tornado) will have usable data to build upon the questions asked in this project.
+
+The addition of more monitoring sites will involve (potentially substantial) data integration and merging. Simplification of the merging process is yet another reason to restrict expansion to those sites that track the same metrics already investigated here.
+
+Finally, our current project is limited to one site, and therefore much of our analysis is based off of interpretation of data visualizations such as the graphs above. The integration of more datasets from other monitoring stations would provide a better basis for more robust statistical analysis that may be able to detect a more nuanced interaction between tornadoes and stream chemistry than is presented here. 
