@@ -133,14 +133,14 @@ mau_water_o2 <- ggplot(water, aes(x = Date, y = diss_o2_mgl)) +
   geom_line() +
   geom_vline(data = big_T, aes(xintercept = big_T$date), color = 'red') +
   theme_minimal() +
-  labs(title = "Dissolved Oxygen and Tornadoes at Maumelle, AR Site; 2007-2019",
+  labs(title = "Dissolved Oxygen and Tornadoes at Maumelle, AR Site",
        y = "Dissolved oxygen (mg/L)")
 
 mau_water_temp <- ggplot(water, aes(x = Date, y = water_temp_c)) +
   geom_line() +
   geom_vline(data = big_T, aes(xintercept = big_T$date), color = 'red') +
   theme_minimal() +
-  labs(title = "Water Temperature and Tornadoes at Maumelle, AR Site; 2007-2019",
+  labs(title = "Water Temperature and Tornadoes at Maumelle, AR Site",
        y = "Water temperature (°C)")
 
 mau_water_turb
@@ -206,19 +206,33 @@ water_tornado_effects <- water %>%
 
 ```{r}
 # Show site location, different spatial join method (buffer), and resulting tornadoes
-tm_shape(site_buffer) +
+path_viz =  tm_shape(site_buffer) +
   tm_polygons(col = "white") +
 tm_shape(site_location) +
   tm_dots(size = 0.25) +
 tm_shape(tornadoes_cropped) + 
   tm_lines(col = "mag",
-           palette = "Reds")
+           palette = "Reds",
+           lwd = 5) +
+  tm_layout(main.title = "Large Tornadoes within 100km of Monitoring Site",
+            main.title.position = "center",
+            main.title.size = 1)
+
+tmap_save(tm = path_viz, filename = "tornado_path.jpg")
 ```
 
 ```{r}
 # Show water quality data for +/- 10 days of a single tornado
 ggplot(data = water_tornado_effects[1:21, ], aes(x = Date, y = turbidity_fnu)) +
+  geom_vline(xintercept = median(water_tornado_effects$Date), color = "red") +
   geom_point() +
-  theme_classic()
+  theme_classic() 
+```
+
+```{r}
+mau_water_o2 + scale_x_date(limits = lubridate::as_date(c("2008-01-26", "2015-01-01")))
+ggsave("dissolved_o2.jpg")
+mau_water_temp + scale_x_date(limits = lubridate::as_date(c("2008-01-26", "2015-01-01")))
+ggsave("water_temp.jpg")
 ```
 
