@@ -21,7 +21,10 @@ We will assess water quality based on four parameters measured daily at the Maum
 
 Tornado data and water quality data are imported in a tidy format to begin with, so data management before final visualization and presentation should be minimal and take no more than a few hours—this will be undertaken as a group.
 
-After data processing for this project, we will store our final datasets on KNB (https://dev.nceas.ucsb.edu/), and our code will be available in a repository on github here: https://github.com/petermenzies/tornado-effects-on-water-quality-parameters
+After data processing for this project, our code will remain available in a repository on github here: https://github.com/petermenzies/tornado-effects-on-water-quality-parameters, and our data and associated metadata will be stored on KNB and can be found at the links below.
+
+Tornadoes: https://dev.nceas.ucsb.edu/view/urn%3Auuid%3A53e73cdd-83a6-4b59-93e1-183c7c4dd2bc
+Water quality: https://dev.nceas.ucsb.edu/view/urn%3Auuid%3A0f7caa73-6953-402c-a485-9dd5951cd816
 
 Our data log is stored in the file 'data-log_tornado-effects-on-water-quality.xlsx' in the github repository. Because data was only retrieved once, it it a short log with only one entry for tornado data and one entry for stream data.
 
