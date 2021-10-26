@@ -117,27 +117,37 @@ T_plot +
 ```{r}
 mau_water_turb <- ggplot(water, aes(x = Date, y = turbidity_fnu)) +
   geom_line() +
-  geom_vline(data = big_T, aes(xintercept = big_T$date), color = 'red')
-
-mau_water_turb
+  geom_vline(data = big_T, aes(xintercept = big_T$date), color = 'red') +
+  theme_minimal() +
+  labs(title = "Turbidity and Tornadoes at Maumelle, AR Site; 2007-2019",
+       y = "Turbidity in formazin nephelometric units (FNU)")
 
 mau_water_dis <- ggplot(water, aes(x = Date, y = discharge_cfs)) +
   geom_line() +
-  geom_vline(data = big_T, aes(xintercept = big_T$date), color = 'red')
-
-mau_water_dis
+  geom_vline(data = big_T, aes(xintercept = big_T$date), color = 'red') +
+  theme_minimal() +
+  labs(title = "Discharge and Tornadoes at Maumelle, AR Site; 2007-2019",
+       y = "Stream discharge (ft³/s)")
 
 mau_water_o2 <- ggplot(water, aes(x = Date, y = diss_o2_mgl)) +
   geom_line() +
-  geom_vline(data = big_T, aes(xintercept = big_T$date), color = 'red')
-
-mau_water_o2
+  geom_vline(data = big_T, aes(xintercept = big_T$date), color = 'red') +
+  theme_minimal() +
+  labs(title = "Dissolved Oxygen and Tornadoes at Maumelle, AR Site; 2007-2019",
+       y = "Dissolved oxygen (mg/L)")
 
 mau_water_temp <- ggplot(water, aes(x = Date, y = water_temp_c)) +
   geom_line() +
-  geom_vline(data = big_T, aes(xintercept = big_T$date), color = 'red')
+  geom_vline(data = big_T, aes(xintercept = big_T$date), color = 'red') +
+  theme_minimal() +
+  labs(title = "Water Temperature and Tornadoes at Maumelle, AR Site; 2007-2019",
+       y = "Water temperature (°C)")
 
+mau_water_turb
+mau_water_dis
+mau_water_o2
 mau_water_temp
+
 ```
 
 ## 3. Future Directions
