@@ -2,11 +2,19 @@
 title: "Effect of tornadoes on water quality parameters"
 author: "Peter Menzies"
 date: "10/18/2021"
-output: html_document
+output: 
+  html_document:
+    theme: cerulean
+    code_folding: show
+    toc: true
+    toc_float: true
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE,
+                      message = FALSE, 
+                      warning = FALSE, 
+                      include = TRUE)
 
 ## Load packages
 library(tidyverse)
@@ -16,7 +24,7 @@ library(sf)
 library(tmap)
 ```
 
-## US water quality data
+## 1. US water quality data
 
 This study site and associated information was found using the USGS National Water Dashboard. Site information can be found at <https://waterdata.usgs.gov/nwis/uv?site_no=07263296>. The parameter codes were pulled from <https://help.waterdata.usgs.gov/parameter_cd?group_cd=%25>. Data from the NWIS web service is derived from <https://waterservices.usgs.gov/>.
 
@@ -62,7 +70,7 @@ print(paste0("URL of water data query: ", attr(water, "url")))
 print(paste0("Time API accessed: ", attr(water, "queryTime")))
 ```
 
-## US tornado data
+## 2. US tornado data
 
 Tornado data is retrieved from NOAA's National Weather Service found at <https://www.spc.noaa.gov/wcm/#data>.
 
@@ -132,7 +140,7 @@ mau_water_temp <- ggplot(water, aes(x = Date, y = water_temp_c)) +
 mau_water_temp
 ```
 
-## Future Directions
+## 3. Future Directions
 
 The most logical next step identified by our team in order to gain better understanding of the effects of tornadoes on stream water quality beyond the data presented here would be to expand our analysis to a greater number of stream monitoring sites. This is an obvious step to expand the available data, but there are many smaller processes involved in integrating future stream data into our analysis here.
 
@@ -184,7 +192,7 @@ water_tornado_effects <- water %>%
   filter(Date %in% date_vector)
 ```
 
-### Visualizing Results
+### Potential Visualizations
 
 ```{r}
 # Show site location, different spatial join method (buffer), and resulting tornadoes
