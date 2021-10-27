@@ -17,7 +17,7 @@ Our investigation will utilize water quality readings from USGS and tornado data
 
 ### Data Management:
 
-We will assess water quality based on four parameters measured daily at the Maumelle River monitoring station near Wye, AR. All tornado data from the US between 1950-2019 was collected, but this will be filtered down to tornadoes within 5 kilometers of the monitoring station (as measured by starting lat/long of each tornado).
+We will assess water quality based on four parameters measured daily at the Maumelle River monitoring station near Wye, AR. All tornado data from the US between 1950-2019 was collected, but this will be filtered down to tornadoes within 100 kilometers of the monitoring station (as measured by starting lat/long of each tornado).
 
 Tornado data and water quality data are imported in a tidy format to begin with, so data management before final visualization and presentation should be minimal and take no more than a few hours—this will be undertaken as a group.
 
