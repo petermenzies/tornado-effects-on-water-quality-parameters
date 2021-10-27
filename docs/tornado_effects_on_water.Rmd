@@ -24,6 +24,10 @@ library(sf)
 library(tmap)
 ```
 
+## Introduction
+
+This project seeks to answer the environmental question: What are the effects of tornadoes on key water quality parameters? The following code loads in relevant data sets on tornadoes and water through APIs and presents preliminary analysis. The project's data management plan, data log, and code to query and analyze the API are included in the GitHub repository. These data sets and accompanying metadata are preserved on KNB as data packages.
+
 ## 1. US water quality data
 
 This study site and associated information was found using the USGS National Water Dashboard. Site information can be found at <https://waterdata.usgs.gov/nwis/uv?site_no=07263296>. The parameter codes were pulled from <https://help.waterdata.usgs.gov/parameter_cd?group_cd=%25>. Data from the NWIS web service is derived from <https://waterservices.usgs.gov/>.
@@ -219,6 +223,8 @@ tm_shape(tornadoes_cropped) +
             main.title.size = 1)
 
 tmap_save(tm = path_viz, filename = "tornado_path.jpg")
+
+path_viz
 ```
 
 ```{r}
@@ -236,3 +242,9 @@ mau_water_temp + scale_x_date(limits = lubridate::as_date(c("2008-01-26", "2015-
 ggsave("water_temp.jpg")
 ```
 
+## Citations
+
+```{r}
+citation("rnoaa")
+citation("dataRetrieval")
+```
